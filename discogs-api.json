@@ -1,0 +1,160 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Discogs REST API",
+    "description": "same",
+    "termsOfService": "https://www.discogs.com/developers",
+    "contact": {
+      "email": "info@discogs.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "0.1.0-SNAPSHOT"
+  },
+  "externalDocs": {
+    "description": "The API description",
+    "url": "https://www.discogs.com/developers"
+  },
+  "servers": [
+    {
+      "url": "https://api.discogs.com/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "artist",
+      "description": "represents an artist"
+    }
+  ],
+  "paths": {
+    "/artists/{artist_id}": {
+      "get": {
+        "tags": [
+          "artist"
+        ],
+        "summary": "Get an artist",
+        "description": "The Artist resource represents a person in the Discogs database who contributed to a Release in some capacity.",
+        "operationId": "getArtistById",
+        "parameters": [
+          {
+            "name": "artist_id",
+            "in": "path",
+            "description": "The Artist ID",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the request is successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                },
+                "example": ""
+              }
+            }
+          },
+          "401": {
+            "description": "Returned if the authentication credentials are incorrect or missing."
+          },
+          "404": {
+            "description": "Returned if the application property is not found or the user does not have permission to view it."
+          }
+        }
+      }
+    },
+    "/releases/{release_id}/rating/{username}": {
+      "get": {
+        "tags": [
+          "release",
+          "rating"
+        ],
+        "summary": "Retrieves the rating of a release for a given user.",
+        "operationId": "getReleaseRatingByUsername",
+        "parameters": [
+          {
+            "name": "release_id",
+            "in": "path",
+            "description": "The release ID",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The username",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned if the request is successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseRating"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Artist": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "profile": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "data_quality": {
+            "type": "string"
+          }
+        }
+      },
+      "ReleaseRating": {
+        "required": [
+          "username",
+          "release",
+          "rating"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "release_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rating": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    }
+  }
+}
